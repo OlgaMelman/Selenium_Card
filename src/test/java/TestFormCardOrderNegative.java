@@ -23,6 +23,8 @@ public class TestFormCardOrderNegative {
         options.addArguments("--no-sandbox");
         options.addArguments("--headless");
         driver = new ChromeDriver(options);
+
+        driver.get("http://localhost:9999");
     }
     @AfterEach
     void tearDown() {
@@ -32,7 +34,6 @@ public class TestFormCardOrderNegative {
 
     @Test
     void shouldTestOnlyRightName() {
-        driver.get("http://localhost:9999");
         driver.findElement(By.cssSelector("[data-test-id='name'] input")).sendKeys("Эмилия-Анна");
         driver.findElement(By.tagName("button")).click();
         String expected = "Поле обязательно для заполнения";
@@ -42,7 +43,6 @@ public class TestFormCardOrderNegative {
 
     @Test
     void shouldTestOnlyRightPhone() {
-        driver.get("http://localhost:9999");
         driver.findElement(By.cssSelector("[data-test-id='phone'] input")).sendKeys("+79994567373");
         driver.findElement(By.tagName("button")).click();
         String expected = "Поле обязательно для заполнения";
@@ -52,7 +52,6 @@ public class TestFormCardOrderNegative {
 
     @Test
     void shouldTestOnlyCheckbox() {
-        driver.get("http://localhost:9999");
         driver.findElement(By.cssSelector("[data-test-id='agreement']")).click();
         driver.findElement(By.tagName("button")).click();
         String expected = "Поле обязательно для заполнения";
@@ -61,7 +60,6 @@ public class TestFormCardOrderNegative {
     }
     @Test
     void shouldTestRightNameAndCheckbox() {
-        driver.get("http://localhost:9999");
         driver.findElement(By.cssSelector("[data-test-id='name'] input")).sendKeys("Анатолий");
         driver.findElement(By.cssSelector("[data-test-id='agreement']")).click();
         driver.findElement(By.tagName("button")).click();
@@ -72,7 +70,6 @@ public class TestFormCardOrderNegative {
 
     @Test
     void shouldTestRightPhoneAndCheckbox() {
-        driver.get("http://localhost:9999");
         driver.findElement(By.cssSelector("[data-test-id='phone'] input")).sendKeys("+79994567373");
         driver.findElement(By.cssSelector("[data-test-id='agreement']")).click();
         driver.findElement(By.tagName("button")).click();
@@ -80,10 +77,18 @@ public class TestFormCardOrderNegative {
         String actual = driver.findElement(By.cssSelector("[data-test-id='name'].input_invalid .input__sub")).getText().trim();
         assertEquals(expected, actual);
     }
+    @Test
+    void shouldTestRightNameAndPhoneWithoutCheckbox() {
+        driver.findElement(By.cssSelector("[data-test-id='name'] input")).sendKeys("Анатолий");
+        driver.findElement(By.cssSelector("[data-test-id='phone'] input")).sendKeys("+79994567373");
+        driver.findElement(By.tagName("button")).click();
+        String expected = "Я соглашаюсь с условиями обработки и использования моих персональных данных и разрешаю сделать запрос в бюро кредитных историй";
+        String actual = driver.findElement(By.cssSelector("[data-test-id='agreement'].input_invalid .checkbox__text")).getText().trim();
+        assertEquals(expected, actual);
+    }
 
     @Test
     void shouldTestNameInLatinLetters() {
-        driver.get("http://localhost:9999");
         driver.findElement(By.cssSelector("[data-test-id='name'] input")).sendKeys("Viktor");
         driver.findElement(By.cssSelector("[data-test-id='phone'] input")).sendKeys("+79994567373");
         driver.findElement(By.cssSelector("[data-test-id='agreement']")).click();
@@ -95,7 +100,6 @@ public class TestFormCardOrderNegative {
     }
     @Test
     void shouldTestNumberWith8() {
-        driver.get("http://localhost:9999");
         driver.findElement(By.cssSelector("[data-test-id='name'] input")).sendKeys("Анна");
         driver.findElement(By.cssSelector("[data-test-id='phone'] input")).sendKeys("89994567373");
         driver.findElement(By.cssSelector("[data-test-id='agreement']")).click();
